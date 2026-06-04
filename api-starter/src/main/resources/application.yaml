@@ -2,6 +2,11 @@ spring:
   application:
     name: api-starter
 
+
 app:
   key:
     ${APP_KEY}
+
+server:
+  port: ${PORT:8080}
+  address: ${HOST:localhost}

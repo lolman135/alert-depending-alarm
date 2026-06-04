@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
@@ -26,6 +28,10 @@ class SecurityConfig(private val tokenFilter: CustomTokenFilter) {
             addFilterBefore<UsernamePasswordAuthenticationFilter>(tokenFilter)
         }
         return http.build()
+    }
 
+    @Bean
+    fun userDetailsService(): UserDetailsService {
+        return UserDetailsService { throw UsernameNotFoundException("No users") }
     }
 }
