@@ -8,5 +8,5 @@ app:
     ${APP_KEY}
 
 server:
-  port: ${PORT:8080}
-  address: ${HOST:localhost}
+  port: ${PORT_STARTER}
+  address: ${HOST_STARTER}
