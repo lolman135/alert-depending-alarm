@@ -1,6 +1,6 @@
-package labs.apistarter.dto
+package labs.apistarter.usecase.info
 
-data class OutBoundStatusDto(
+data class WatcherStatusInfo(
     val status: String,
     val description: String,
     val pid: Int? = null

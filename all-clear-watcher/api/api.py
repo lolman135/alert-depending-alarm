@@ -1,7 +1,7 @@
-import subprocess
-import signal
+import signal, sys, subprocess
 from pathlib import Path
-
+sys.path.append(str(Path(__file__).parent))
+from settings import settings
 from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -13,8 +13,8 @@ watcher_file = str(BASE_DIR / "../watcher/watcher.py")
 
 class StatusResponse(BaseModel):
     status: str
+    description: str
     pid: int | None = None
-
 
 @app.post("/start", response_model=StatusResponse)
 async def start():
@@ -28,7 +28,11 @@ async def start():
         start_new_session=True
     )
 
-    return StatusResponse(status="started", pid=process.pid)
+    return StatusResponse(
+        status="started",
+        description="Watcher started successfully.",
+        pid=process.pid
+    )
 
 
 @app.post("/stop", response_model=StatusResponse)
@@ -45,16 +49,15 @@ async def stop():
         process.kill()
 
     process = None
-    return StatusResponse(status="stopped")
+    return StatusResponse(status="stopped", description="Watcher stopped successfully.",)
 
 
 @app.get("/status", response_model=StatusResponse)
 async def status():
     if process is None or process.poll() is not None:
-        return StatusResponse(status="stopped")
-    return StatusResponse(status="running", pid=process.pid)
+        return StatusResponse(status="stopped", description="Watcher is currently not running or stopped manually.")
+    return StatusResponse(status="running", description="Watcher is currently running", pid=process.pid)
 
 if __name__ == "__main__":
     import uvicorn
-    import os
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+    uvicorn.run(app, host=settings.host, port=settings.port)

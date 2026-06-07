@@ -7,13 +7,15 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.ResourceAccessException
 
 @Service
-class StopWatchingAlertStatusUseCase(private val caller: ExternalApiCaller) : UseCase<Unit, WatcherStatusInfo> {
+class GetStatusOfWatcherUseCase(private val caller: ExternalApiCaller) : UseCase<Unit, WatcherStatusInfo> {
+
     override fun execute(inboundCommand: Unit): WatcherStatusInfo {
         try {
-            val response = caller.callStop()
+            val response = caller.callStatus()
             return WatcherStatusInfo(response.status, response.description, response.pid)
         } catch (_: ResourceAccessException){
             throw ResourceUnavailableException("Watcher")
         }
+
     }
 }

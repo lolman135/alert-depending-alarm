@@ -2,7 +2,6 @@ spring:
   application:
     name: api-starter
 
-
 app:
   key:
     ${APP_KEY}
@@ -10,3 +9,7 @@ app:
 server:
   port: ${PORT_STARTER}
   address: ${HOST_STARTER}
+
+watcher:
+  api:
+    url: http://${WATCHER_HOST}:${WATCHER_PORT}

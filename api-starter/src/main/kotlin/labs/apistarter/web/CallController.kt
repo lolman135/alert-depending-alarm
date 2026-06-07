@@ -1,9 +1,11 @@
 package labs.apistarter.web
 
 import labs.apistarter.dto.OutBoundStatusDto
+import labs.apistarter.usecase.GetStatusOfWatcherUseCase
 import labs.apistarter.usecase.StopWatchingAlertStatusUseCase
 import labs.apistarter.usecase.StratWatchingAlertStatusUseCase
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -12,18 +14,25 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/watcher")
 class CallController(
     private val stratWatchingAlertStatusUseCase: StratWatchingAlertStatusUseCase,
-    private val stopWatchingAlertStatusUseCase: StopWatchingAlertStatusUseCase
+    private val stopWatchingAlertStatusUseCase: StopWatchingAlertStatusUseCase,
+    private val getStatusOfWatcherUseCase: GetStatusOfWatcherUseCase
 ) {
 
     @PostMapping("/start")
     fun start(): ResponseEntity<OutBoundStatusDto> {
-        stratWatchingAlertStatusUseCase.execute(Unit)
-        return ResponseEntity.ok(OutBoundStatusDto("Started", "Watcher started to monitor all-clear status",  200))
+        val info = stratWatchingAlertStatusUseCase.execute(Unit)
+        return ResponseEntity.ok(OutBoundStatusDto(info.status, info.description, info.pid))
     }
 
     @PostMapping("/stop")
     fun stop(): ResponseEntity<OutBoundStatusDto> {
-        stopWatchingAlertStatusUseCase.execute(Unit)
-        return ResponseEntity.ok(OutBoundStatusDto("Stopped", "Watcher manually stopped by user", 200))
+        val info = stopWatchingAlertStatusUseCase.execute(Unit)
+        return ResponseEntity.ok(OutBoundStatusDto(info.status, info.description, info.pid))
+    }
+
+    @GetMapping("/status")
+    fun getStatus(): ResponseEntity<OutBoundStatusDto>{
+        val info = getStatusOfWatcherUseCase.execute(Unit)
+        return ResponseEntity.ok(OutBoundStatusDto(info.status, info.description, info.pid))
     }
 }
