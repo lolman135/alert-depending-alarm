@@ -1,18 +1,28 @@
-from operator import truediv
+import asyncio
 
-from alerts_in_ua import Client as AlertsClient
-import time
+compare_holder = [None, None]
 
-def __get_alert_status(token: str, region_uid: int):
-    alerts_client = AlertsClient(token=token)
-    return alerts_client.get_air_raid_alert_status(region_uid)
+async def detect(token: str, region_uid: int, get_status) -> bool:
+    first = compare_holder[0] if compare_holder[0] != None else await get_status(token, region_uid)
+    compare_holder[0] = first
+    log1 = f"[Detector]: previous state: {first}"
+    print(log1)
 
-def detect(token, region_uid):
-    while True:
-        allertStatus = __get_alert_status(token, region_uid)
-        print(allertStatus)
-        time.sleep(1)
-        if True:
-            break
+    await asyncio.sleep(10)
 
-    return True
+    second = await get_status(token, region_uid)
+    compare_holder[1] = second
+    log2 = f"[Detector]: current state: {second}"
+    print(log2)
+
+    if first == "active" and second == "no_alert":
+        log3 = f"[Detector]: congrats!! all-clear, ready for alarm to wake up"
+        print(log3)
+        return True
+    else:
+        log3 = f"[Detector]: No all-clear. Going to retry after 30 sec of waiting"
+        print(log3)
+        current = compare_holder[1]
+        compare_holder[0] = current
+        compare_holder[1] = None
+        return False

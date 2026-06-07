@@ -41,3 +41,7 @@ async def status():
         description="Watcher is currently running",
         pid=watcher_service.get_pid()
     )
+
+@router.get(path="/health", response_model=str)
+async def health():
+    return "Everything is ok! Watcher API is running"

@@ -5,10 +5,11 @@ import labs.apistarter.service.extrernal.WatcherStatusResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.body
 
 @Component
 class ExternalApiCallerImpl(
-    @Value("\${watcher.api.url.v1}") private val watcherUrl: String
+    @Value($$"${watcher.api.url.v1}") private val watcherUrl: String
 ) : ExternalApiCaller {
 
     private val client = RestClient.create(watcherUrl)
@@ -17,20 +18,27 @@ class ExternalApiCallerImpl(
         return client.post()
             .uri("/start")
             .retrieve()
-            .body(WatcherStatusResponse::class.java)!!
+            .body<WatcherStatusResponse>()!!
     }
 
     override fun callStop(): WatcherStatusResponse {
         return client.post()
             .uri("/stop")
             .retrieve()
-            .body(WatcherStatusResponse::class.java)!!
+            .body<WatcherStatusResponse>()!!
     }
 
     override fun callStatus(): WatcherStatusResponse {
         return client.get()
             .uri("/status")
             .retrieve()
-            .body(WatcherStatusResponse::class.java)!!
+            .body<WatcherStatusResponse>()!!
+    }
+
+    override fun checkHealth(): String {
+        return client.get()
+            .uri("/health")
+            .retrieve()
+            .body<String>()!!
     }
 }

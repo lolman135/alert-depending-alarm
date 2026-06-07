@@ -4,4 +4,5 @@ interface ExternalApiCaller {
     fun callStart(): WatcherStatusResponse
     fun callStop(): WatcherStatusResponse
     fun callStatus(): WatcherStatusResponse
+    fun checkHealth(): String
 }

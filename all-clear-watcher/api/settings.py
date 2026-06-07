@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     host: str = "localhost"
-    port: int = 5000
+    port: int = 5001
     receiver_url: str = "http://somehost:0000/userid"
     alerts_api_key: str = "sometoken"
 
