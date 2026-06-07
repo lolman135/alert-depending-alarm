@@ -3,7 +3,7 @@ import asyncio
 compare_holder = [None, None]
 
 async def detect(token: str, region_uid: int, get_status) -> bool:
-    first = compare_holder[0] if compare_holder[0] != None else await get_status(token, region_uid)
+    first = compare_holder[0] if compare_holder[0] is not None else await get_status(token, region_uid)
     compare_holder[0] = first
     log1 = f"[Detector]: previous state: {first}"
     print(log1)
