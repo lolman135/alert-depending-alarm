@@ -1,11 +1,15 @@
 import subprocess
 import signal
+from pathlib import Path
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
 process: subprocess.Popen | None = None
 
+BASE_DIR = Path(__file__).parent
+watcher_file = str(BASE_DIR / "../watcher/watcher.py")
 
 class StatusResponse(BaseModel):
     status: str
@@ -20,9 +24,8 @@ async def start():
         return StatusResponse(status="already_running", pid=process.pid)
 
     process = subprocess.Popen(
-        ["python3", "script.py"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        ["python3", watcher_file],
+        start_new_session=True
     )
 
     return StatusResponse(status="started", pid=process.pid)
@@ -50,3 +53,8 @@ async def status():
     if process is None or process.poll() is not None:
         return StatusResponse(status="stopped")
     return StatusResponse(status="running", pid=process.pid)
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
