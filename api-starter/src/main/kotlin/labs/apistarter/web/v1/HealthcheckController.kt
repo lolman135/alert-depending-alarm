@@ -1,4 +1,4 @@
-package labs.apistarter.web
+package labs.apistarter.web.v1
 
 import labs.apistarter.service.health.HealthcheckService
 import org.springframework.http.ResponseEntity

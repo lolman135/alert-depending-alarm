@@ -1,4 +1,4 @@
-package labs.apistarter.web
+package labs.apistarter.web.v1
 
 import labs.apistarter.dto.OutBoundStatusDto
 import labs.apistarter.usecase.GetStatusOfWatcherUseCase

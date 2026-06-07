@@ -1,17 +1,15 @@
-package labs.apistarter.service.extrernal
+package labs.apistarter.service.extrernal.v1
 
+import labs.apistarter.service.extrernal.ExternalApiCaller
+import labs.apistarter.service.extrernal.WatcherStatusResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 
 @Component
 class ExternalApiCallerImpl(
-    @Value("\${watcher.api.url}") private val watcherUrl: String
+    @Value("\${watcher.api.url.v1}") private val watcherUrl: String
 ) : ExternalApiCaller {
-
-    init {
-        println("Watcher URL: $watcherUrl")
-    }
 
     private val client = RestClient.create(watcherUrl)
 

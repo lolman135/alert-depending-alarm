@@ -2,6 +2,7 @@ spring:
   application:
     name: api-starter
 
+
 app:
   key:
     ${APP_KEY}
@@ -12,4 +13,5 @@ server:
 
 watcher:
   api:
-    url: http://${WATCHER_HOST}:${WATCHER_PORT}
+    url:
+      v1: http://${WATCHER_HOST}:${WATCHER_PORT}/api/v1
