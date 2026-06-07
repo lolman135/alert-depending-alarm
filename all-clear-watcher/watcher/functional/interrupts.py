@@ -1,0 +1,2 @@
+class WatcherFinishWorkInterrupt(Exception):
+    pass

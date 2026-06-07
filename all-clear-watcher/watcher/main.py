@@ -1,6 +1,8 @@
 import sys, threading, os
 
-from watcher import main
+from functional.interrupts import WatcherFinishWorkInterrupt
+from functional.watcher import main
+
 
 # Parents process lifecycle monitoring
 def watch_parent_death():
@@ -9,14 +11,16 @@ def watch_parent_death():
     except Exception:
         pass
 
-    print("\n[Watcher] Parent process (api.py) died! Committing seppuku...")
+    print("\n[Watcher] Parent process died.")
     os._exit(0)
 
 threading.Thread(target=watch_parent_death, daemon=True).start()
 
 
-print("[Watcher] Started successfully. Waiting for tasks...")
+print("[Watcher] Started successfully.")
 try:
     main()
 except KeyboardInterrupt:
     print("[Watcher] Stopped by user.")
+except WatcherFinishWorkInterrupt:
+    print("[Watcher] Finished work.")
