@@ -1,4 +1,5 @@
 import asyncio, aiohttp
+import traceback
 from datetime import time
 compare_holder = [None, None]
 
@@ -27,15 +28,22 @@ async def detect(token: str, region_uid: int, get_status, local_sleep: int) -> b
         compare_holder[1] = None
         return False
 
-async def notify(start: time, end: time , current_time: time, url: str):
+
+async def notify(url: str, app_key: str):
     try:
-        if start <= current_time <= end:
-            await trigger_shortcut(url)
-    except Exception:
-        print("[Notifier] Some error occurs")
+        print(f"[Notifier] Attempting to send request to: {url}")  # Посмотрим, какой URL реально приходит
 
-async def trigger_shortcut(url: str):
-    async with aiohttp.ClientSession() as session:
-        await session.post(url)
+        headers = {"Authorization": f"Bearer {app_key}"}
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers) as response:
+                status = response.status
+                body = await response.text()
 
-    print("[Notifier] Request Recieved")
+                if status == 200:
+                    print(f"[Notifier] Success! Backend answered: 200. Body: {body}")
+                else:
+                    print(f"[Notifier] Warning! Backend returned status {status}. Error: {body}")
+
+    except Exception as e:
+        print(f"[Notifier] Network or connection error occurred: {e}")
+        traceback.print_exc()

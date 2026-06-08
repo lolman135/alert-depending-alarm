@@ -27,6 +27,7 @@ async def do_work(time_check_flag: bool, test_flag: bool):
 
     alerts_api_key = args.api_key
     receiver_url = args.receiver_url
+    app_key = args.app_key
     region_uid = 31
     flag = False
     correct_time_flag = False
@@ -49,7 +50,7 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 )
                 await asyncio.sleep(global_sleep)
 
-            if not time_check_flag:
+            if not time_check_flag or (start_time <= current_time <= end_time):
                 correct_time_flag = True
                 break
 
@@ -57,6 +58,6 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 log = f"[Watcher]: failed with some error"
                 print(log)
 
-    await notify(start_time, end_time, current_time, receiver_url)
+    await notify(receiver_url, app_key)
 
     raise WatcherFinishWorkInterrupt()

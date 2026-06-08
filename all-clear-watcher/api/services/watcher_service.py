@@ -30,7 +30,8 @@ class WatcherService:
             [
                 sys.executable, WATCHER_FILE,
                 "--receiver-url", settings.receiver_url,
-                "--api-key", settings.alerts_api_key
+                "--api-key", settings.alerts_api_key,
+                "--app-key", settings.app_key
             ],
             stdin=subprocess.PIPE,
             start_new_session=True

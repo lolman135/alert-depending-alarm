@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     port: int = 5001
     receiver_url: str = "http://somehost:0000/userid"
     alerts_api_key: str = "sometoken"
+    app_key: str = "somekey"
 
     model_config = SettingsConfigDict(
         env_file=str(Path(__file__).parent / "../../.env"),
