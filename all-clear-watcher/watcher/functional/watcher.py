@@ -17,8 +17,6 @@ async def mock_get_alert_status(token: str, region_uid: int):
     return status_stack.pop()
 
 async def do_work(time_check_flag: bool, test_flag: bool):
-    # TODO: delete after implementing switching mode
-    print(f"Time check flag: {time_check_flag}")
     parser = argparse.ArgumentParser()
     parser.add_argument("--receiver-url", required=True)
     parser.add_argument("--api-key", required=True)

@@ -1,6 +1,4 @@
 import asyncio, aiohttp
-import traceback
-from datetime import time
 compare_holder = [None, None]
 
 async def detect(token: str, region_uid: int, get_status, local_sleep: int) -> bool:
@@ -31,8 +29,6 @@ async def detect(token: str, region_uid: int, get_status, local_sleep: int) -> b
 
 async def notify(url: str, app_key: str):
     try:
-        print(f"[Notifier] Attempting to send request to: {url}")  # Посмотрим, какой URL реально приходит
-
         headers = {"Authorization": f"Bearer {app_key}"}
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers) as response:
@@ -40,10 +36,9 @@ async def notify(url: str, app_key: str):
                 body = await response.text()
 
                 if status == 200:
-                    print(f"[Notifier] Success! Backend answered: 200. Body: {body}")
+                    print(f"[Notifier] Success! Body: {body}")
                 else:
-                    print(f"[Notifier] Warning! Backend returned status {status}. Error: {body}")
+                    print(f"[Notifier] Warning! Error: {body}")
 
     except Exception as e:
         print(f"[Notifier] Network or connection error occurred: {e}")
-        traceback.print_exc()
