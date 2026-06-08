@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import certifi, os, yaml
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
@@ -18,7 +20,9 @@ def watch_parent_death():
     os._exit(0)
 
 def parse_config():
-    with open("config.yaml", "r", encoding="utf-8") as config_file:
+    BASE_DIR = Path(__file__).parent
+    config_path = BASE_DIR / "config.yaml"
+    with open(config_path, "r", encoding="utf-8") as config_file:
         return yaml.safe_load(config_file)
 
 def get_time_check_flag(config):
@@ -33,6 +37,8 @@ if __name__ == "__main__":
 
     print("[Watcher] Started successfully.")
     try:
+
+
         asyncio.run(do_work(get_time_check_flag(parse_config()), get_test_check_flag(parse_config())))
     except KeyboardInterrupt:
         print("[Watcher] Stopped by user.")

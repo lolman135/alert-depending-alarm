@@ -1,11 +1,33 @@
 spring:
   application:
     name: api-starter
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
+logging:
+  level:
+    spring: debug
+
+    org.springframework.security: debug
+    org.springframework.security.web: debug
+
+    org.springframework.web: debug
+    org.springframework.web.client: trace
+    org.springframework.web.filter: trace
 
 app:
-  key:
-    ${APP_KEY}
+  key: ${APP_KEY}
+  mail:
+    to: ${SMTP_TO}
 
 server:
   port: ${PORT_STARTER}

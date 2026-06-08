@@ -1,6 +1,7 @@
 package labs.apistarter.web
 
 import jakarta.servlet.http.HttpServletRequest
+import labs.apistarter.usecase.exception.NotificationFailedException
 import labs.apistarter.usecase.exception.ResourceUnavailableException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -23,6 +24,16 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         val problem =
             ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.message ?: "Service Unavailable")
         problem.title = "Service Unavailable"
+        problem.instance = URI.create(request.requestURI)
+        log.warn(ex.message)
+        return problem
+    }
+
+    @ExceptionHandler(NotificationFailedException::class)
+    fun handleNotificationFailed(ex: NotificationFailedException, request: HttpServletRequest): ProblemDetail {
+        val problem =
+            ProblemDetail.forStatusAndDetail(HttpStatus.BAD_GATEWAY, ex.message ?: "Service Unavailable")
+        problem.title = "BAD GATEWAY"
         problem.instance = URI.create(request.requestURI)
         log.warn(ex.message)
         return problem
