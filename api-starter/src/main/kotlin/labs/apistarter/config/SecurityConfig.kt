@@ -15,7 +15,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(private val tokenFilter: CustomTokenFilter) {
-
+    
+    // TODO: Create and add here webhook filter to process separate token specified only for 
+    // running webhook that yanks email sender
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain{
         http{
