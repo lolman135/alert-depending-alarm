@@ -27,9 +27,9 @@ async def detect(token: str, region_uid: int, get_status, local_sleep: int) -> b
         return False
 
 
-async def notify(url: str, app_key: str):
+async def notify(url: str, webhook_key: str):
     try:
-        headers = {"Authorization": f"Bearer {app_key}"}
+        headers = {"Authorization": f"Bearer {webhook_key}"}
         async with aiohttp.ClientSession() as session:
             async with session.post(url, headers=headers) as response:
                 status = response.status

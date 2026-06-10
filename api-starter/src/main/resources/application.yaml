@@ -25,7 +25,9 @@ logging:
     org.springframework.web.filter: trace
 
 app:
-  key: ${WATCHER_APP_KEY}
+  key: ${APP_KEY}
+  webhook:
+    key: ${WATCHER_WEBHOOK_KEY}
   mail:
     to: ${SMTP_TO}
 

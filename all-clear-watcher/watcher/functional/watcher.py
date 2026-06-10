@@ -20,12 +20,12 @@ async def do_work(time_check_flag: bool, test_flag: bool):
     parser = argparse.ArgumentParser()
     parser.add_argument("--receiver-url", required=True)
     parser.add_argument("--api-key", required=True)
-    parser.add_argument("--app-key", required=True)
+    parser.add_argument("--webhook-key", required=True)
     args = parser.parse_args()
 
     alerts_api_key = args.api_key
     receiver_url = args.receiver_url
-    app_key = args.app_key
+    webhook_key = args.webhook_key
     region_uid = 31
     flag = False
     correct_time_flag = False
@@ -56,6 +56,6 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 log = f"[Watcher]: failed with some error"
                 print(log)
 
-    await notify(receiver_url, app_key)
+    await notify(receiver_url, webhook_key)
 
     raise WatcherFinishWorkInterrupt()

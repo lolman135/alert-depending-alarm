@@ -21,7 +21,7 @@ def watch_parent_death():
 
 def parse_config():
     BASE_DIR = Path(__file__).parent
-    config_path = BASE_DIR / "config.yaml"
+    config_path = BASE_DIR / "../../config.yaml"
     with open(config_path, "r", encoding="utf-8") as config_file:
         return yaml.safe_load(config_file)
 
@@ -37,8 +37,6 @@ if __name__ == "__main__":
 
     print("[Watcher] Started successfully.")
     try:
-
-
         asyncio.run(do_work(get_time_check_flag(parse_config()), get_test_check_flag(parse_config())))
     except KeyboardInterrupt:
         print("[Watcher] Stopped by user.")

@@ -3,14 +3,13 @@ package labs.apistarter.security
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import labs.apistarter.service.token.TokenProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import kotlin.text.substring
 
-class CustomTokenFilter(
-    private val tokenProvider: TokenProvider
+class WebhookTokenFilter(
+    private val key: String
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -20,7 +19,7 @@ class CustomTokenFilter(
     ) {
         val header = request.getHeader("Authorization")
 
-        if (header == null || !tokenProvider.compareToken(header.substring(7))){
+        if (header == null || key != header.substring(7)){
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("Unauthorized")
             return
