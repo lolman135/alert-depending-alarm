@@ -2,4 +2,21 @@ services:
   
   edge-service:
     build:
-      context: api-starter
+      context: edge-service/.
+    container-name: edge-service
+    ports: 
+      - '8080:8080'
+    env_file:
+      - .env
+    restart: always
+    networks: 
+      - inner-services
+
+  alert-watcher:
+    build:
+      context: all-clear-watcher
+
+
+networks:
+  inner-services:
+    driver: bridge
