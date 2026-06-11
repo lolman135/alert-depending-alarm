@@ -44,3 +44,5 @@ out/
 
 ### Custom ###
 .env
+**/__pycache__
+
