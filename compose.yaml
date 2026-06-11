@@ -1,0 +1,5 @@
+services:
+  
+  edge-service:
+    build:
+      context: api-starter
