@@ -7,7 +7,7 @@ sys.path.append(str(BASE_DIR))
 import uvicorn
 from fastapi import FastAPI
 from settings import settings
-from v1.routers import router as v1_router
+from api.v1.routers import router as v1_router
 
 app = FastAPI(
     title="Air Raid Alert Watcher API",

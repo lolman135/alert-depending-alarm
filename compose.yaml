@@ -3,19 +3,32 @@ services:
   edge-service:
     build:
       context: edge-service/.
-    container-name: edge-service
-    ports: 
-      - '8080:8080'
+    container_name: edge-service
     env_file:
       - .env
+    ports: 
+      - '${PORT_STARTER}:${PORT_STARTER}'
+    environment:
+      - WATCHER_HOST=alert-watcher
     restart: always
     networks: 
       - inner-services
 
   alert-watcher:
     build:
-      context: all-clear-watcher
-
+      context: alert-watcher/.
+    container_name: alert-watcher
+    env_file:
+      - .env
+    environment:
+      - WATCHER_RECEIVER_URL=http://edge-service:${PORT_STARTER}/api/v1/notify
+      - TZ=Europe/Kyiv
+    volumes:
+      - ./config.yaml:/config.yaml
+    init: true
+    restart: always
+    networks: 
+      - inner-services
 
 networks:
   inner-services:
