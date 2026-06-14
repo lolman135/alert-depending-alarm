@@ -1,8 +1,7 @@
 services:
   
   edge-service:
-    build:
-      context: edge-service/.
+    image: ${EDGE_IMAGE:-lolman135/edge-service:latest}
     container_name: edge-service
     env_file:
       - .env
@@ -13,8 +12,7 @@ services:
       - inner-services
 
   alert-watcher:
-    build:
-      context: alert-watcher/.
+    image: ${ALERT_WATCHER_IMAGE:-lolman135/alert-watcher:latest}
     container_name: alert-watcher
     env_file:
       - .env
