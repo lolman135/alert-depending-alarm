@@ -6,8 +6,6 @@ services:
     container_name: edge-service
     env_file:
       - .env
-    ports: 
-      - '${PORT_STARTER}:${PORT_STARTER}'
     environment:
       - WATCHER_HOST=alert-watcher
     restart: always
@@ -29,6 +27,19 @@ services:
     restart: always
     networks: 
       - inner-services
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    environment:
+      - PORT_STARTER=${PORT_STARTER}
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template
+    networks:
+      - inner-services
+    depends_on:
+      - edge-service
 
 networks:
   inner-services:
