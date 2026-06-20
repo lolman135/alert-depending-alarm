@@ -2,7 +2,10 @@ name: Login, Build and Push to Docker
 inputs:
   service:
     required: true
-    description: Combines to steps to reuse it into main workflow
+    description: Specified service for building
+  token:
+    required: true
+    description: GitHub token for authentication
 runs:
   using: composite
   steps:
@@ -11,7 +14,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.token }}
 
     - name: Build and Push docker image to GHCR
       uses: docker/build-push-action@v5
