@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from datetime import datetime
 import certifi, os, yaml
 
 os.environ["SSL_CERT_FILE"] = certifi.where()
@@ -16,7 +16,7 @@ def watch_parent_death():
     except Exception:
         pass
 
-    print("\n[Watcher] Parent process died. Committing seppuku...")
+    print(f"\n[Watcher]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: Parent process died. Committing seppuku...")
     os._exit(0)
 
 def parse_config():

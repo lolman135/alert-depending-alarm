@@ -1,25 +1,28 @@
 import asyncio, aiohttp
+from datetime import datetime
+
 compare_holder = [None, None]
 
-async def detect(token: str, region_uid: int, get_status, local_sleep: int) -> bool:
+async def detect(token: str, region_uid: int, get_status, local_sleep: int, global_sleep: int) -> bool:
     first = compare_holder[0] if compare_holder[0] is not None else await get_status(token, region_uid)
     compare_holder[0] = first
-    log1 = f"[Detector]: previous state: {first}"
+    log1 = f"[Detector]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: previous state: {first}"
     print(log1)
 
     await asyncio.sleep(local_sleep)
 
     second = await get_status(token, region_uid)
     compare_holder[1] = second
-    log2 = f"[Detector]: current state: {second}"
+    now = datetime.now().strftime("%H:%M:%S %d.%m.%Y")
+    log2 = f"[Detector]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: current state: {second}"
     print(log2)
 
     if first == "active" and second == "no_alert":
-        log3 = f"[Detector]: congrats!! all-clear, ready for alarm to wake up"
+        log3 = f"[Detector]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: congrats!! all-clear, ready for alarm to wake up"
         print(log3)
         return True
     else:
-        log3 = f"[Detector]: No all-clear. Going to retry after 30 sec of waiting"
+        log3 = f"[Detector]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: No all-clear. Going to retry after {global_sleep} sec of waiting"
         print(log3)
         current = compare_holder[1]
         compare_holder[0] = current
@@ -36,9 +39,9 @@ async def notify(url: str, webhook_key: str):
                 body = await response.text()
 
                 if status == 200:
-                    print(f"[Notifier] Success! Body: {body}")
+                    print(f"[Notifier]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: Success! Body: {body}")
                 else:
-                    print(f"[Notifier] Warning! Error: {body}")
+                    print(f"[Notifier]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: Warning! Error: {body}")
 
     except Exception as e:
-        print(f"[Notifier] Network or connection error occurred: {e}")
+        print(f"[Notifier]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: Network or connection error occurred: {e}")

@@ -29,7 +29,7 @@ async def do_work(time_check_flag: bool, test_flag: bool):
     region_uid = 31
     flag = False
     correct_time_flag = False
-    global_sleep = 1 if test_flag else 30
+    global_sleep = 1 if test_flag else 10
     local_sleep = 1 if test_flag else 8
     start_time = time(0, 0, 0)
     end_time = time(23, 59, 59)
@@ -44,7 +44,8 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                     token=alerts_api_key,
                     region_uid=region_uid,
                     get_status=alert_status_provider,
-                    local_sleep=local_sleep
+                    local_sleep=local_sleep,
+                    global_sleep=global_sleep
                 )
                 await asyncio.sleep(global_sleep)
 
@@ -53,7 +54,7 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 break
 
         except Exception:
-                log = f"[Watcher]: failed with some error"
+                log = f"[Watcher]::[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: failed with some error"
                 print(log)
 
     await notify(receiver_url, webhook_key)
