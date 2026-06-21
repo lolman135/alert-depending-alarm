@@ -2,11 +2,10 @@ name: CI/CD Pipeline for Alert-Depend Alarm
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
-# I'll add more triggers here
 jobs:
     # TODO: finish all stages
   build-edge-service:
@@ -80,5 +79,7 @@ jobs:
           WATCHER_PORT=5001
           HOST_STARTER=0.0.0.0
           WATCHER_HOST=0.0.0.0
+          EOF
           
-# TODO: Finish deployment stage
+      - name: Make work directory on server
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }} "mkdir -p ~/depending-alarm"
