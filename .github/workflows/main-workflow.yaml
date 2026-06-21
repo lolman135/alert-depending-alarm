@@ -2,12 +2,11 @@ name: CI/CD Pipeline for Alert-Depend Alarm
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 
 jobs:
-    # TODO: finish all stages
   build-edge-service:
     runs-on: ubuntu-latest
     steps:
