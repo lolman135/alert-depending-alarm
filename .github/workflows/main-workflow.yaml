@@ -52,7 +52,7 @@ jobs:
     needs: [build-alert-watcher, build-edge-service]
     steps:
       - name: Get Code
-      - uses: actions/checkout@v6
+        uses: actions/checkout@v6
 
       - name: Setup Tailscale
         uses: tailscale/github-action@v2
