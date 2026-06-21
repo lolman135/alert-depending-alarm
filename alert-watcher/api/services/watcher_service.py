@@ -28,7 +28,7 @@ class WatcherService:
         import sys
         self.process = subprocess.Popen(
             [
-                sys.executable, WATCHER_FILE,
+                sys.executable, "-u", WATCHER_FILE,
                 "--receiver-url", settings.receiver_url,
                 "--api-key", settings.alerts_api_key,
                 "--webhook-key", settings.webhook_key

@@ -1,4 +1,4 @@
 check-flag:
   time: false
   # for now test flag is on config, but later, maybe, I'll add ability to choose mode vid API (didn' think so ^_^)
-  test: true
+  test: false
