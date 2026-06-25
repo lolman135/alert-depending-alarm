@@ -37,6 +37,9 @@ jobs:
           HOST_STARTER=0.0.0.0
           WATCHER_HOST=0.0.0.0
           MESSAGE="Вставай, Манюська Любимая"
+          EDGE_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/edge-service:latest
+          ALERT_WATCHER_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/alert-watcher:latest
+          ENV=main
           EOF
 
       - name: Make work directory on server
@@ -52,8 +55,6 @@ jobs:
       - name: Deploy
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }} "
-            export EDGE_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/edge-service:latest &&
-            export ALERT_WATCHER_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/alert-watcher:latest &&
             cd ~/depending-alarm &&
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin &&
             docker compose pull &&
