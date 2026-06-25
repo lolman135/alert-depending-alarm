@@ -31,8 +31,8 @@ async def do_work(time_check_flag: bool, test_flag: bool):
     correct_time_flag = False
     global_sleep = 1 if test_flag else 10
     local_sleep = 1 if test_flag else 8
-    start_time = time(0, 0, 0)
-    end_time = time(23, 59, 59)
+    start_time = time(6, 0, 0)
+    end_time = time(12, 0, 0)
     current_time = datetime.now().time()
 
 
