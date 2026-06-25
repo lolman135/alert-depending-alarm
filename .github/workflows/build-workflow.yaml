@@ -1,0 +1,43 @@
+name: build-workflow.yaml
+on:
+  workflow_call:
+
+jobs:
+  build-edge-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v6
+
+      - name: Set Up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set Up Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Build JARs
+        working-directory: edge-service
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build jar -x test
+
+      - name: Complex login, build and push
+        uses: ./.github/actions/login-push
+        with:
+          service: edge-service
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-alert-watcher:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v6
+
+      - name: Complex login, build and push
+        uses: ./.github/actions/login-push
+        with:
+          service: alert-watcher
+          token: ${{ secrets.GITHUB_TOKEN }}

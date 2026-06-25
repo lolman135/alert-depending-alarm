@@ -12,8 +12,9 @@ import org.springframework.stereotype.Component
 @Component
 class EmailNotificationServiceImpl(
     private val mailSender: JavaMailSender,
-    @Value("\${spring.mail.username}") private val fromEmail: String,
-    @Value("\${app.mail.to}") private val toEmail: String
+    @Value($$"${spring.mail.username}") private val fromEmail: String,
+    @Value($$"${app.mail.to}") private val toEmail: String,
+    @Value($$"${app.mail.message}") private val messageText: String
 ) : NotificationService {
 
     override suspend fun notifyAllClear() = withContext(Dispatchers.IO) {
@@ -25,7 +26,7 @@ class EmailNotificationServiceImpl(
             helper.setTo(toEmail)
 
             helper.setSubject("[ALL CLEAR] TIME TO WAKE UUUUP")
-            helper.setText("Відбій повітряної тривоги, треба вставати :)", false)
+            helper.setText(messageText, false)
             mailSender.send(message)
         } catch (ex: Exception){
             throw NotificationFailedException(ex.message!!)

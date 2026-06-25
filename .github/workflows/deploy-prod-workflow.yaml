@@ -1,0 +1,61 @@
+name: deploy-prod-workflow.yaml
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v6
+
+      - name: Setup Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_KEY }}
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan ${{ secrets.TAILSCALE_SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          APP_KEY=${{ secrets.APP_KEY }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          SMTP_TO=${{ secrets.SMTP_TO }}
+          WATCHER_ALERTS_API_KEY=${{ secrets.WATCHER_ALERTS_API_KEY }}
+          WATCHER_WEBHOOK_KEY=${{ secrets.WATCHER_WEBHOOK_KEY }}
+          PORT_STARTER=8080
+          WATCHER_PORT=5001
+          NGINX_PORT=80
+          HOST_STARTER=0.0.0.0
+          WATCHER_HOST=0.0.0.0
+          MESSAGE=""
+          EOF
+
+      - name: Make work directory on server
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }} "mkdir -p ~/depending-alarm"
+
+      - name: Copy files to server
+        run: |
+          scp .env ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/.env
+          scp compose.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/compose.yaml
+          scp config.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/config.yaml
+          scp nginx.conf.template ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/nginx.conf.template
+
+      - name: Deploy
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }} "
+            export EDGE_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/edge-service:latest &&
+            export ALERT_WATCHER_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/alert-watcher:latest &&
+            cd ~/depending-alarm &&
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin &&
+            docker compose pull &&
+            docker compose up -d
+          "

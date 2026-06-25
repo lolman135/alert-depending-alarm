@@ -30,6 +30,7 @@ app:
     key: ${WATCHER_WEBHOOK_KEY}
   mail:
     to: ${SMTP_TO}
+    message: ${MESSAGE}
 
 server:
   port: ${PORT_STARTER}
@@ -39,3 +40,4 @@ watcher:
   api:
     url:
       v1: http://${WATCHER_HOST}:${WATCHER_PORT}/api/v1
+

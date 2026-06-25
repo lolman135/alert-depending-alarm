@@ -28,8 +28,10 @@ services:
 
   nginx:
     image: nginx:alpine
+    env_file:
+      - .env
     ports:
-      - "80:80"
+      - ${NGINX_PORT}
     environment:
       - PORT_STARTER=${PORT_STARTER}
     volumes:
