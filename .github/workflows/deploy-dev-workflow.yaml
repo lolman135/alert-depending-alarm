@@ -44,10 +44,10 @@ jobs:
 
       - name: Copy files to server
         run: |
-          scp .env ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/.env
-          scp compose.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/compose.yaml
-          scp config.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/config.yaml
-          scp nginx.conf.template ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm/nginx.conf.template
+          scp .env ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm-dev/.env
+          scp compose.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm-dev/compose.yaml
+          scp config.yaml ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm-dev/config.yaml
+          scp nginx.conf.template ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }}:~/depending-alarm-dev/nginx.conf.template
 
       - name: Deploy
         run: |
@@ -55,7 +55,7 @@ jobs:
             export EDGE_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/edge-service:latest &&
             export ALERT_WATCHER_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/alert-watcher:latest &&
             export ENV=dev
-            cd ~/depending-alarm &&
+            cd ~/depending-alarm-dev &&
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin &&
             docker compose pull &&
             docker compose up -d

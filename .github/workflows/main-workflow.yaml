@@ -1,10 +1,11 @@
 name: Master pipeline
 on:
-#  push:
-#    branches:
-#      - master
-#      - dev
-
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       environments:
@@ -32,7 +33,7 @@ jobs:
   call-deploy-prod-workflow:
     needs: call-build-workflow
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      (github.event_name == 'pull_request' && github.ref == 'refs/heads/master') ||
       (github.event_name == 'workflow_dispatch' && inputs.environments == 'prod')
     uses: ./.github/workflows/deploy-prod-workflow.yaml
     secrets: inherit
