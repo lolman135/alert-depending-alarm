@@ -54,6 +54,7 @@ jobs:
           ssh ${{ secrets.SSH_USER }}@${{ secrets.TAILSCALE_SERVER_IP }} "
             export EDGE_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/edge-service:latest &&
             export ALERT_WATCHER_IMAGE=ghcr.io/${{ github.repository_owner }}/depending-alarm/alert-watcher:latest &&
+            export ENV=dev
             cd ~/depending-alarm &&
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin &&
             docker compose pull &&

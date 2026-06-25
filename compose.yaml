@@ -2,7 +2,7 @@ services:
   
   edge-service:
     image: ${EDGE_IMAGE:-lolman135/edge-service:latest}
-    container_name: edge-service
+    container_name: edge-service-${ENV:-main}
     env_file:
       - .env
     environment:
@@ -13,7 +13,7 @@ services:
 
   alert-watcher:
     image: ${ALERT_WATCHER_IMAGE:-lolman135/alert-watcher:latest}
-    container_name: alert-watcher
+    container_name: alert-watcher-${ENV:-main}
     env_file:
       - .env
     environment:
