@@ -1,10 +1,10 @@
 services:
   
   edge-service:
-    image: ${EDGE_IMAGE:-lolman135/edge-service:latest}
-    container_name: edge-service-${ENV:-main}
     env_file:
       - .env
+    image: ${EDGE_IMAGE:-lolman135/edge-service:latest}
+    container_name: edge-service-${ENV:-main}
     environment:
       - WATCHER_HOST=alert-watcher
     restart: always
@@ -12,10 +12,10 @@ services:
       - inner-services
 
   alert-watcher:
-    image: ${ALERT_WATCHER_IMAGE:-lolman135/alert-watcher:latest}
-    container_name: alert-watcher-${ENV:-main}
     env_file:
       - .env
+    image: ${ALERT_WATCHER_IMAGE:-lolman135/alert-watcher:latest}
+    container_name: alert-watcher-${ENV:-main}
     environment:
       - WATCHER_RECEIVER_URL=http://edge-service:${PORT_STARTER}/api/v1/notify
       - TZ=Europe/Kyiv
