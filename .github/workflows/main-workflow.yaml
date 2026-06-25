@@ -16,21 +16,20 @@ on:
           - dev
           - prod
 
+jobs:
+  call-build-workflow:
+    uses: ./.github/workflows/build-workflow.yaml
 
-  jobs:
-    call-build-workflow:
-      uses: ./.github/workflows/build-workflow.yaml
+  call-deploy-dev-workflow:
+    needs: call-build-workflow
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environments == 'dev')
+    uses: ./.github/workflows/deploy-dev-workflow.yaml
 
-    call-deploy-dev-workflow:
-      needs: call-build-workflow
-      if: |
-        (github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
-        (github.event_name == 'workflow_dispatch' && inputs.environments == 'dev')
-      uses: ./.github/workflows/deploy-dev-workflow.yaml
-
-    call-deploy-prod-workflow:
-      needs: call-build-workflow
-      if: |
-        (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-        (github.event_name == 'workflow_dispatch' && inputs.environments == 'prod')
-      uses: ./.github/workflows/deploy-prod-workflow.yaml
+  call-deploy-prod-workflow:
+    needs: call-build-workflow
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environments == 'prod')
+    uses: ./.github/workflows/deploy-prod-workflow.yaml
