@@ -33,7 +33,6 @@ async def do_work(time_check_flag: bool, test_flag: bool):
     local_sleep = 1 if test_flag else 8
     start_time = time(6, 0, 0)
     end_time = time(12, 0, 0)
-    current_time = datetime.now().time()
 
 
     while not correct_time_flag:
@@ -49,9 +48,17 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 )
                 await asyncio.sleep(global_sleep)
 
+            current_time = datetime.now().time()
+
             if not time_check_flag or (start_time <= current_time <= end_time):
                 correct_time_flag = True
                 break
+            else:
+                log = f"[Watcher]::[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: All clear detected, but ignored due to time constraints."
+                print(log)
+                flag = False
+                await asyncio.sleep(global_sleep)
+
 
         except Exception:
                 log = f"[Watcher]::[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: failed with some error"

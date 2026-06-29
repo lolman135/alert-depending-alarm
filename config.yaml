@@ -1,4 +1,4 @@
 check-flag:
-  time: false
+  time: true
   test: false
 
