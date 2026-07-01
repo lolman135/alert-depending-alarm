@@ -2,7 +2,7 @@ import argparse
 import asyncio
 from datetime import datetime, time
 from alerts_in_ua import AsyncClient as AsyncAlertsClient
-from .notifier import detect, notify
+from .notifier import detect, notify, clear_compare_holder
 from .interrupts import WatcherFinishWorkInterrupt
 
 async def get_alert_status(token: str, region_uid: int):
@@ -57,6 +57,7 @@ async def do_work(time_check_flag: bool, test_flag: bool):
                 log = f"[Watcher]::[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: All clear detected, but ignored due to time constraints."
                 print(log)
                 flag = False
+                clear_compare_holder()
                 await asyncio.sleep(global_sleep)
 
 
