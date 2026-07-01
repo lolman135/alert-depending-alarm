@@ -45,3 +45,7 @@ async def notify(url: str, webhook_key: str):
 
     except Exception as e:
         print(f"[Notifier]:[{datetime.now().strftime("%H:%M:%S %d.%m.%Y")}]: Network or connection error occurred: {e}")
+
+def clear_compare_holder():
+    global compare_holder
+    compare_holder = [None, None]
